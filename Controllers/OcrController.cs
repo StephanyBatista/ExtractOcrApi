@@ -38,7 +38,7 @@ namespace ExtractOcrApi.Controllers
             if(!result.Success) return new { Error = result.Error }; 
 
             var textExtracted = await _documentToText.Extract(type, result.FilePath); //await ExtractOcr(type, result.FilePath);
-            _fileHelper.DeleteFile(result.FilePath);
+            await _fileHelper.DeleteFile(result.FilePath);
 
             return new { Text = textExtracted };
         }

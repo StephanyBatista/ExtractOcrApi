@@ -29,14 +29,14 @@ namespace ExtractOcrApi
         {
             try {
                 var byteArray = await result.Content.ReadAsByteArrayAsync();
-                System.IO.File.WriteAllBytes(filepath, byteArray);
+                await System.IO.File.WriteAllBytesAsync(filepath, byteArray);
                 return true;
             } catch { return false; }
         }
 
-        public void DeleteFile(string path)
+        public async Task DeleteFile(string path)
         {
-            System.IO.File.Delete(path);
+            await Task.Run(() => System.IO.File.Delete(path));
         }
     }
 
