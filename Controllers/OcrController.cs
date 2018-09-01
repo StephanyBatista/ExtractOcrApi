@@ -28,11 +28,16 @@ namespace ExtractOcrApi.Controllers
         [HttpGet]
         public async Task<dynamic> Get()
         {
-            var url = Request.Query["url"];
-            var type = Request.Query["type"];
+            var url = Request.Query["url"];            
             
-            if(string.IsNullOrEmpty(url) || string.IsNullOrEmpty(type))
-                return new {Error =  "Params invalid. Url and Type must be send"};
+            if(string.IsNullOrEmpty(url))
+                return new {Error =  "Params invalid. Url must be send"};
+
+            var urlAtArray = url.ToString().Split('.');
+            var type = urlAtArray.Last();
+
+            if(!type.Contains("pdf") && !type.Contains("docx") && !type.Contains("jpeg") && !type.Contains("jpg"))
+                return new {Error =  "Params invalid. File type invalid"};
 
             var result = await _fileHelper.GetAndSaveFile(url, type, _environment.ContentRootPath);
             if(!result.Success) return new { Error = result.Error }; 

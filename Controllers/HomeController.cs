@@ -15,7 +15,9 @@ namespace ExtractOcrApi.Controllers
         [HttpGet]
         public string Get()
         {
-            return "OCR is working, please call GET /ocr?url=url_of_document&type=type_of_document(pdf, docx, pgn, jpeg, jpg) to extract OCR";
+            return 
+                @"OCR is working, please call 
+                GET /ocr?url=url_of_document&type=type_of_document(pdf, docx, pgn, jpeg, jpg) to extract OCR";
         }
     }
 }
