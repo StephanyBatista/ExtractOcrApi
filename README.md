@@ -4,6 +4,6 @@ A API in .Net Core to extract documents OCR with many libs like Tesseract, PDF2T
 
 With this docker image you can send a document (pdf, docx, jpeg, jpg and png) url and get the document text at json
 
-API GET /ocr?url=documento_url&type=document_type
+API GET /ocr?url=documento_url
 
 To scale access https://hub.docker.com/r/salmeidabatista/extractocrapi/
