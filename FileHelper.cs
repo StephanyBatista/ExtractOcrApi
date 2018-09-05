@@ -9,20 +9,27 @@ namespace ExtractOcrApi
     {
         public async Task<FileResult> GetAndSaveFile(string url, string type, string rootPath)
         {
-            using (var client = new HttpClient())
+            using (var handler = new HttpClientHandler())
             {
-                using (var result = await client.GetAsync(url))
+                handler.ClientCertificateOptions = ClientCertificateOption.Manual;
+                handler.ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) => true;
+
+                using (var client = new HttpClient(handler))
                 {
-                    if (!result.IsSuccessStatusCode) return new FileResult { Success = false, Error = "Error to download file" };
+                    using (var result = await client.GetAsync(url))
+                    {
+                        if (!result.IsSuccessStatusCode) return new FileResult { Success = false, Error = "Error to download file" };
 
-                    var fileName = $"{Guid.NewGuid().ToString()}.{type}";
-                    var filepath = Path.Combine(rootPath, $"{fileName}");
-                    if (!await SaveFile(result, filepath))
-                        return new FileResult { Success = false, Error = "Error to save file" };
+                        var fileName = $"{Guid.NewGuid().ToString()}.{type}";
+                        var filepath = Path.Combine(rootPath, $"{fileName}");
+                        if (!await SaveFile(result, filepath))
+                            return new FileResult { Success = false, Error = "Error to save file" };
 
-                    return new FileResult { Success = true, FilePath = filepath };   
+                        return new FileResult { Success = true, FilePath = filepath };   
+                    }
                 }
             }
+            
         }
 
         private static async Task<bool> SaveFile(HttpResponseMessage result, string filepath)
